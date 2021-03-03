@@ -13,7 +13,8 @@ public class ClientService {
 
     BufferedReader reader;
     Socket socket;
-
+    ObjectOutputStream objectOutputStream;
+    ObjectInputStream objectInputStream;
     @PostConstruct
     public void init(){
 
@@ -24,6 +25,9 @@ public class ClientService {
         try {
             socket = new Socket(hostname, port);
             OutputStream output = socket.getOutputStream();
+           objectOutputStream=new ObjectOutputStream(output);
+           //objectInputStream=new ObjectInputStream(socket.getInputStream());
+
              writer = new PrintWriter(output, true);
 
         } catch (UnknownHostException ex) {
@@ -59,4 +63,28 @@ public class ClientService {
         }
         return line;
     }
+
+
+    public PrintWriter getWriter(){
+        return writer;
+    }
+
+
+    public BufferedReader getReader(){
+        return reader;
+    }
+
+    public ObjectOutputStream getWriterObject(){
+        return objectOutputStream;
+    }
+
+    public ObjectInputStream getReaderObject(){
+        try {
+            objectInputStream=new ObjectInputStream(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return objectInputStream;
+    }
+
 }
